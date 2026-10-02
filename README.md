@@ -14,6 +14,15 @@ Manim is an engine for precise programmatic animations, designed for creating ex
 
 Note, there are two versions of manim.  This repository began as a personal project by the author of [3Blue1Brown](https://www.3blue1brown.com/) for the purpose of animating those videos, with video-specific code available [here](https://github.com/3b1b/videos).  In 2020 a group of developers forked it into what is now the [community edition](https://github.com/ManimCommunity/manim/), with a goal of being more stable, better tested, quicker to respond to community contributions, and all around friendlier to get started with. See [this page](https://docs.manim.community/en/stable/faq/installation.html#different-versions) for more details.
 
+## Reel production workspace
+
+This checkout includes a reusable reel-production layer in `reelstudio/`:
+portrait 2D scenes, project manifests, narration scripts, and optional voiceover/music
+mixing. Start with `python -m reelstudio --list` or
+`python -m reelstudio --project getting_started --draft`.
+See [the production guide](docs/reelstudio.md) for setup and audio commands,
+and [the six-episode math series](projects/math_to_ml/scripts/episodes.md) for scripts.
+
 ## Installation
 > [!Warning]
 > **WARNING:** These instructions are for ManimGL _only_. Trying to use these instructions to install [Manim Community/manim](https://github.com/ManimCommunity/manim) or instructions there to install this version will cause problems. You should first decide which version you wish to install, then only follow the instructions for your desired version.
