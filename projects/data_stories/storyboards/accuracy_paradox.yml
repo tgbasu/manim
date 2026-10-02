@@ -1,0 +1,56 @@
+topic: The accuracy paradox
+title: My model was 99% accurate. It caught zero fraud. #Shorts
+cover_title: 99% accurate. Totally useless.
+beats:
+  - title: 99% accurate. Totally useless.
+    narration: My fraud model scored ninety-nine percent accuracy. It never caught a single fraudster.
+    visual:
+      kind: statement
+  - title: The data
+    narration: Out of ten thousand transactions, only one hundred were fraud. That is just one percent.
+    visual:
+      kind: bars
+      labels: [Legit, Fraud]
+      values: [9900, 100]
+      highlight: 1
+  - title: The lazy model
+    narration: So the model learned the easiest trick. Predict legit for everything, and be right ninety-nine percent of the time.
+    visual:
+      kind: stat
+      value: 99
+      suffix: "%"
+      label: accuracy by always saying legit
+  - title: Confusion matrix
+    narration: The confusion matrix exposes it. Zero fraud cases caught. All one hundred slipped through.
+    visual:
+      kind: matrix
+      rows: [Actual legit, Actual fraud]
+      cols: [Pred legit, Pred fraud]
+      values: [[9900, 0], [100, 0]]
+  - title: Measure what matters
+    narration: For rare events, track recall and precision instead. Recall here is zero, and that is the real score.
+    visual:
+      kind: compare
+      left_title: Accuracy
+      left: [99%, Looks great, Hides failure]
+      right_title: Recall
+      right: [0%, Brutally honest, Catches the trap]
+  - title: The fix
+    narration: Then fix the imbalance. Reweight the classes, resample, and tune the decision threshold.
+    visual:
+      kind: code
+      lines:
+        - "model = LogisticRegression("
+        - "    class_weight='balanced')"
+        - "model.fit(X_train, y_train)"
+        - "recall_score(y_test, preds)"
+  - title: Remember this
+    narration: High accuracy on imbalanced data proves nothing. Always ask, accurate at what?
+    visual:
+      kind: statement
+post_caption: |-
+  99% accuracy sounds amazing until you realise the model never caught a single fraud case.
+  Have you ever been fooled by a metric? Tell me below.
+  Numbers are illustrative.
+hashtags: [datascience, machinelearning, ai, python, statistics, learnwithme]
+sources: []

@@ -1,7 +1,9 @@
 """Render project scenes, then optionally mix voiceover and music."""
 
 import argparse
+import copy
 import math
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -28,6 +30,50 @@ def load_project(name):
     if not scene_file.is_file():
         raise ValueError(f"Scene file does not exist: {scene_file}")
     return project, scene_file
+
+
+def load_config(path):
+    config = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(config, dict):
+        raise ValueError("Render configuration must be a YAML mapping")
+    return config
+
+
+def render_scenes(scene_file, scenes, config, destination, stills=False, draft=False, env=None, ffmpeg=None):
+    """Render scenes into destination and return the output paths.
+
+    ``env`` adds environment variables for the render process, which is how
+    data-driven scenes such as StoryReel receive their storyboard.
+    """
+    config = copy.deepcopy(config)
+    destination = Path(destination).resolve()
+    if draft:
+        config.setdefault("camera", {}).update(resolution="(360, 640)", fps=15)
+    directory_config = config.setdefault("directories", {})
+    cache = ROOT / ".cache" / "reelstudio"
+    cache.mkdir(parents=True, exist_ok=True)
+    directory_config["cache"] = str(cache)
+    directory_config["mirror_module_path"] = False
+    directory_config.setdefault("subdirs", {})["output"] = str(destination)
+    if ffmpeg:
+        config.setdefault("file_writer", {})["ffmpeg_bin"] = ffmpeg
+    # Each render owns its config, so concurrent jobs cannot overwrite settings.
+    with tempfile.TemporaryDirectory(prefix="render-", dir=cache) as work:
+        runtime_config = Path(work) / "config.yml"
+        runtime_config.write_text(yaml.safe_dump(config), encoding="utf-8")
+        scene_path = Path(scene_file).resolve()
+        command = [sys.executable, "-m", "manimlib", str(scene_path.relative_to(ROOT)),
+                   *scenes, "--config_file", str(runtime_config), "-w", "-q"]
+        if stills:
+            command.append("-s")
+        subprocess.run(command, cwd=ROOT, check=True, env={**os.environ, **(env or {})})
+    outputs = []
+    for scene in scenes:
+        rendered = destination / f"{scene}{'.png' if stills else '.mp4'}"
+        if not rendered.is_file():
+            raise ValueError(f"Renderer did not create expected output: {rendered}")
+        outputs.append(rendered)
+    return outputs
 
 
 def narration_files(scenes, voiceover=None, audio_dir=None):
@@ -59,6 +105,7 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, help="Output base directory; default: videos/<project>")
     parser.add_argument("--draft", action="store_true", help="360x640 at 15 fps")
     parser.add_argument("--stills", action="store_true", help="Save final-frame PNG covers")
+    parser.add_argument("--storyboard", type=Path, help="Storyboard YAML/JSON for data-driven scenes such as StoryReel")
     audio = parser.add_mutually_exclusive_group()
     audio.add_argument("--voiceover", type=Path, help="Narration for one selected scene")
     audio.add_argument("--audio-dir", type=Path, help="Directory containing <SceneName>.wav/mp3/m4a")
@@ -81,40 +128,23 @@ def main(argv=None):
             raise ValueError("--voiceover-offset must be a finite nonnegative number")
         if not math.isfinite(args.music_volume) or not 0 <= args.music_volume <= 1:
             raise ValueError("--music-volume must be between 0 and 1")
+        if args.storyboard and not args.storyboard.is_file():
+            raise ValueError(f"Storyboard does not exist: {args.storyboard}")
         recordings = narration_files(selected, args.voiceover, args.audio_dir)
         music = args.music.resolve() if args.music else None
         if music and not music.is_file():
             raise ValueError(f"Music does not exist: {music}")
-        config = yaml.safe_load(args.config.read_text(encoding="utf-8"))
-        if not isinstance(config, dict):
-            raise ValueError("Render configuration must be a YAML mapping")
+        config = load_config(args.config)
         output = args.output.resolve() if args.output else ROOT / "videos" / args.project
         if args.draft:
             output = output / "drafts"
-            config.setdefault("camera", {}).update(resolution="(360, 640)", fps=15)
+        env = {"REELSTUDIO_STORYBOARD": str(args.storyboard.resolve())} if args.storyboard else None
         destination = output / ("covers" if args.stills else "silent")
-        directory_config = config.setdefault("directories", {})
-        cache = ROOT / ".cache" / "reelstudio"
-        cache.mkdir(parents=True, exist_ok=True)
-        directory_config["cache"] = str(cache)
-        directory_config["mirror_module_path"] = False
-        directory_config.setdefault("subdirs", {})["output"] = str(destination)
         ffmpeg = find_ffmpeg() if not args.stills else None
-        if ffmpeg:
-            config.setdefault("file_writer", {})["ffmpeg_bin"] = ffmpeg
-        # Each render owns its config, so concurrent jobs cannot overwrite settings.
-        with tempfile.TemporaryDirectory(prefix="render-", dir=cache) as work:
-            runtime_config = Path(work) / "config.yml"
-            runtime_config.write_text(yaml.safe_dump(config), encoding="utf-8")
-            command = [sys.executable, "-m", "manimlib", str(scene_file.relative_to(ROOT)),
-                       *selected, "--config_file", str(runtime_config), "-w", "-q"]
-            if args.stills:
-                command.append("-s")
-            subprocess.run(command, cwd=ROOT, check=True)
+        render_scenes(scene_file, selected, config, destination, stills=args.stills,
+                      draft=args.draft, env=env, ffmpeg=ffmpeg)
         for scene in selected:
             rendered = destination / f"{scene}{'.png' if args.stills else '.mp4'}"
-            if not rendered.is_file():
-                raise ValueError(f"Renderer did not create expected output: {rendered}")
             print(f"Rendered: {rendered}")
             if scene in recordings or music:
                 final = mix_audio(rendered, output / "final" / f"{scene}.mp4", ffmpeg,

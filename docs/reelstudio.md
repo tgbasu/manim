@@ -4,19 +4,29 @@ This workspace combines the local ManimGL engine with a small production layer
 for short educational videos. It supports 2D diagrams, function animations,
 portrait exports, recorded voiceover, and optional background music.
 
+For fully automated, story-driven reels (LLM script, TTS narration synced to
+the animation, and publishing), see [the autopilot guide](autopilot.md).
+
 ## Repository layout
 
 ```text
 manimlib/                   ManimGL engine
 reelstudio/
-  scenes/                   Episode-specific animations
-  shared/                   Portrait layout, theme, and diagram components
+  scenes/                   Episode-specific animations; story_reel.py renders storyboards
+  shared/                   Portrait layout, theme, diagram components, storyboard visuals
   render.py                 Project-based render CLI
   media.py                  FFmpeg narration/music mixing
+  storyboard.py             Storyboard schema, validation, captions
+  writers.py                Claude, OpenAI-compatible, and library script writers
+  voices.py                 Edge, Piper, OpenAI-compatible, and silent narration
+  publishers.py             Local outbox, YouTube Shorts, Instagram Reels
+  autopilot.py              Topic-to-published-reel pipeline CLI
 configs/portrait.yml        Default 1080x1920, 30 fps settings
 projects/<project>/
   project.yml               Scene entry file and scene class names
   scripts/                  Voiceover scripts and editorial notes
+  storyboards/              Storyboards for data-driven projects (data_stories)
+  topics.yml, published.yml Autopilot topic queue and publication log
 assets/audio/               Local recordings and music (ignored)
 assets/images/              Reusable image assets
 videos/<project>/           Generated media (ignored)
@@ -65,7 +75,9 @@ Mixing preserves the silent source. Short narration leaves the remainder silent;
 long narration extends the video by freezing its final frame. This prevents
 truncation but does **not** synchronize speech to individual animation beats.
 Adjust `play(run_time=...)` and `wait(...)` to align speech with visuals. Automatic
-speech generation, word-level captions, and timeline editing are not included.
+speech generation, word-level captions, and timeline editing are not included
+in this manual workflow; the autopilot generates speech and timed captions for
+storyboard projects.
 
 ## Create another video project
 

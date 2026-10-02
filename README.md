@@ -23,6 +23,12 @@ mixing. Start with `python -m reelstudio --list` or
 See [the production guide](docs/reelstudio.md) for setup and audio commands,
 and [the six-episode math series](projects/math_to_ml/scripts/episodes.md) for scripts.
 
+The [reel autopilot](docs/autopilot.md) runs the whole pipeline on its own:
+an LLM (Claude or an open model through Ollama) writes a storyboard, a TTS voice
+narrates it, Manim animates it in sync with the speech, and the reel is published
+to YouTube Shorts and Instagram Reels on a schedule. Try it offline with
+`python -m reelstudio.autopilot run --draft`.
+
 ## Installation
 > [!Warning]
 > **WARNING:** These instructions are for ManimGL _only_. Trying to use these instructions to install [Manim Community/manim](https://github.com/ManimCommunity/manim) or instructions there to install this version will cause problems. You should first decide which version you wish to install, then only follow the instructions for your desired version.

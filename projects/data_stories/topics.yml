@@ -1,0 +1,23 @@
+# Topic queue for `python -m reelstudio.autopilot run`. Add entries by hand or
+# with `python -m reelstudio.autopilot ideas`. A topic is skipped once
+# published.yml logs it for every target platform.
+- topic: The accuracy paradox
+  angle: A fraud model that is 99% accurate and catches nothing
+- topic: Overfitting
+  angle: A model that aces training and flops on day one
+- topic: The 68-95-99.7 rule
+  angle: Is today's coffee sales number weird?
+- topic: Simpson's paradox
+  angle: A treatment that wins in every group yet loses overall
+- topic: Correlation is not causation
+  angle: Ice cream sales and shark attacks rise together
+- topic: The birthday paradox
+  angle: Why 23 people give a coin-flip chance of a shared birthday
+- topic: Data leakage
+  angle: The feature that made a model look perfect and secretly cheated
+- topic: Gradient descent
+  angle: A blindfolded hiker finding the bottom of a valley
+- topic: Precision vs recall
+  angle: Spam filters and cancer screening want opposite things
+- topic: Survivorship bias
+  angle: The WWII planes that came back with bullet holes

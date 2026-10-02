@@ -1,0 +1,48 @@
+topic: Overfitting
+title: Why your model aces training and fails in real life #Shorts
+cover_title: Your model memorised the test
+beats:
+  - title: Perfect score. Total flop.
+    narration: My model scored perfectly in training, then failed on day one in production. Here is why.
+    visual:
+      kind: statement
+  - title: Loss over training
+    narration: Watch the two curves. Training loss keeps falling. Validation loss falls too, at first.
+    visual:
+      kind: line
+      series:
+        - name: Training
+          values: [1.0, 0.7, 0.5, 0.38, 0.3, 0.22, 0.16, 0.11, 0.07]
+        - name: Validation
+          values: [1.05, 0.78, 0.6, 0.52, 0.5, 0.53, 0.6, 0.69, 0.8]
+      x_labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+      highlight_index: 4
+  - title: The turning point
+    narration: Past that point, the model stops learning the trend, this line, and starts memorising every noisy point around it.
+    visual:
+      kind: scatter
+      points: [[1, 3.4], [2, 2.6], [3, 7.9], [4, 6.1], [5, 12.2], [6, 9.8], [7, 15.9], [8, 13.1], [9, 20.3], [10, 17.6]]
+      fit: true
+  - title: Memorising vs learning
+    narration: A memoriser is perfect on questions it has seen and lost on new ones. A learner generalises.
+    visual:
+      kind: compare
+      left_title: Overfit
+      left: [Perfect on training, Chases noise, Fails on new data]
+      right_title: Generalises
+      right: [Good on training, Learns the trend, Holds up live]
+  - title: How to stop it
+    narration: Stop training early, add regularisation, get more data, and always judge on data the model never saw.
+    visual:
+      kind: bullets
+      items: [Early stopping, Regularisation, More data, Honest validation set]
+  - title: Remember this
+    narration: Training score is a promise. Validation score is the truth.
+    visual:
+      kind: statement
+post_caption: |-
+  A perfect training score can be the biggest red flag in machine learning.
+  What is your go-to fix for overfitting?
+  Curves are illustrative.
+hashtags: [datascience, machinelearning, deeplearning, ai, python]
+sources: []

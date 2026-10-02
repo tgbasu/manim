@@ -1,0 +1,47 @@
+topic: The 68-95-99.7 rule
+title: The one rule that explains half of statistics #Shorts
+cover_title: The 68 95 99.7 rule
+beats:
+  - title: Is this result weird?
+    narration: Your coffee shop sold one hundred eighty cups today. Is that normal, or a sign something changed?
+    visual:
+      kind: statement
+  - title: Daily sales
+    narration: Over a year, daily sales average one hundred fifty cups, with a standard deviation of fifteen.
+    visual:
+      kind: distribution
+      mean: 150
+      std: 15
+  - title: Within one sigma
+    narration: About sixty-eight percent of days land within one standard deviation. Between one thirty-five and one sixty-five.
+    visual:
+      kind: distribution
+      mean: 150
+      std: 15
+      shade_from: 135
+      shade_to: 165
+  - title: Within two sigma
+    narration: Ninety-five percent land within two. So one hundred eighty cups sits right at the edge.
+    visual:
+      kind: distribution
+      mean: 150
+      std: 15
+      shade_from: 120
+      shade_to: 180
+  - title: The rule
+    narration: That is the sixty-eight, ninety-five, ninety-nine point seven rule. One, two, and three standard deviations.
+    visual:
+      kind: bars
+      labels: [1 sigma, 2 sigma, 3 sigma]
+      values: [68.3, 95.4, 99.7]
+      unit: "%"
+  - title: Use it today
+    narration: Next time a number surprises you, ask how many standard deviations away it is.
+    visual:
+      kind: statement
+post_caption: |-
+  68, 95, 99.7: the shortcut statisticians use to spot unusual numbers instantly.
+  Where could you use this at work?
+  Sales figures are illustrative.
+hashtags: [statistics, datascience, maths, dataanalytics, learnwithme]
+sources: []
