@@ -1,0 +1,34 @@
+title: Data Stories
+scene_file: reelstudio/scenes/story_reel.py
+scenes:
+  - StoryReel
+
+# Settings for `python -m reelstudio.autopilot`. The defaults run offline with
+# no accounts: hand-written storyboards, estimated timing, and a local outbox.
+# docs/autopilot.md explains each provider and the credentials it needs.
+autopilot:
+  brand:
+    series: DATA STORIES
+    handle: "@your.handle"
+    cta: Follow for a new data story every day
+  channel:
+    niche: data science, statistics, and machine learning explained through stories
+    audience: curious beginners, students, and analysts who scroll on their phones
+    voice_and_style: confident, warm, slightly playful; real-world examples over jargon
+  # library (offline) | anthropic (Claude) | openai (Ollama, LM Studio, vLLM, Groq, OpenAI)
+  writer:
+    provider: library
+  # silent (no audio) | edge (free neural voices) | piper (local) | openai (OpenAI or Kokoro)
+  voice:
+    provider: silent
+  # Optional looping background track (audio files are ignored by Git).
+  # music: assets/audio/music.mp3
+  music_volume: 0.08
+  max_seconds: 75
+  # local | youtube | instagram; remote platforms need credentials in the environment.
+  publish: [local]
+  youtube:
+    privacy: private
+    category_id: "27"
+  instagram:
+    share_to_feed: true

@@ -1,0 +1,10 @@
+# Legacy direct-Manim configuration. Production defaults: configs/portrait.yml.
+# Use this file with reelstudio via --config reels_config.yml.
+camera:
+  resolution: (1080, 1920)
+  fps: 30
+  background_color: "#0B1220"
+directories:
+  subdirs:
+    output: "videos/math_reels"
+  cache: ".cache/manim_reels"

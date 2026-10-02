@@ -1,0 +1,4 @@
+title: 2D explainer starter
+scene_file: reelstudio/scenes/prediction_pipeline.py
+scenes:
+  - PredictionPipeline

@@ -1,0 +1,6 @@
+# Optional providers for python -m reelstudio.autopilot. Install after the
+# engine and requirements-reels.txt. Every provider is optional: the default
+# project settings run offline with none of these installed.
+anthropic>=1.11.0   # writer.provider: anthropic (Claude)
+edge-tts>=7.0.0     # voice.provider: edge (free neural voices, needs network)
+# piper-tts         # voice.provider: piper (local open-source TTS; download a voice model separately)

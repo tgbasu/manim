@@ -1,0 +1,9 @@
+title: Math to ML
+scene_file: reelstudio/scenes/math_functions.py
+scenes:
+  - LinearReel
+  - QuadraticReel
+  - ExponentialReel
+  - LogarithmReel
+  - SigmoidReel
+  - ReLUReel
